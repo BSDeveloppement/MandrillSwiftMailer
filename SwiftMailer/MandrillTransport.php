@@ -26,6 +26,9 @@ class MandrillTransport implements Swift_Transport
     /** @var array|null */
     protected $resultApi;
 
+    /** @var string|null */
+    protected $subaccount;
+
     /**
      * @param Swift_Events_EventDispatcher $dispatcher
      */
@@ -33,6 +36,7 @@ class MandrillTransport implements Swift_Transport
     {
         $this->dispatcher = $dispatcher;
         $this->apiKey = null;
+        $this->subaccount = null;
     }
 
     /**
@@ -73,6 +77,24 @@ class MandrillTransport implements Swift_Transport
     public function getApiKey()
     {
         return $this->apiKey;
+    }
+
+    /**
+     * @param string $subaccount
+     * @return $this
+     */
+    public function setSubaccount($subaccount)
+    {
+        $this->subaccount = $subaccount;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSubaccount()
+    {
+        return $this->subaccount;
     }
 
     /**
@@ -291,6 +313,10 @@ class MandrillTransport implements Swift_Transport
             'headers'    => $headers,
             'tags'       => $tags
         );
+        
+        if($this->subaccount != null){
+            $mandrillMessage['subaccount'] = $this->subaccount;
+        }
 
         if (count($attachments) > 0) {
             $mandrillMessage['attachments'] = $attachments;
